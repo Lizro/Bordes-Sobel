@@ -1,9 +1,9 @@
 #Se genera un color de manera aleatoria
 import random
-def color(xo):
-    R= int(random.random()*xo)
-    G= int(random.random()*xo)
-    B= int(random.random()*xo)
+def color(a):
+    R= int(random.random()*a)
+    G= int(random.random()*a)
+    B= int(random.random()*a)
     return R,G,B
 
 #Busqueda por profundidad

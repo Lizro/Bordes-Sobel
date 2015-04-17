@@ -52,39 +52,20 @@ def CajaEnvolvente(pixeles):
         CajaEnvolvente.append((i,mcolumna))
     for i in range(mcolumna,Mcolumna):
         CajaEnvolvente.append((Mfila,i))
-    Bmx=mcolumna+int((Mcolumna-mcolumna)/2)
-    Bmy=mfila+int((Mfila-mfila)/2)
-    return CajaEnvolvente,Bmx,Bmy
+    CentroXB=mcolumna+int((Mcolumna-mcolumna)/2)
+    CentroYB=mfila+int((Mfila-mfila)/2)
+    return CajaEnvolvente,CentroXB,CentroYB
 
-#A correction of an strange object produced in the preprocessing
-def corrige(bina,fila,w):
-    c=0
-    ch=1
-    cw=1
-    cfila=1
-    while (c==0):
-        if bina[0,w-cw]==255:
-            cw+=1
-        else:
-            c=1
-    c=0
-    while (c==0):
-        if bina[fila-ch,0]==255:
-            ch+=1
-        else:
-            c=1
-    return ch-1,cw-1
 
-#Calculation of the center of mass
-def centroide(visitados):
-    Ch=[]
-    Cw=[]
-    for i in visitados:
-        Ch.append(i[0])
-        Cw.append(i[1])
-    Ch=sum(Ch)/len(visitados)
-    Cw=sum(Cw)/len(visitados)
-    return Ch,Cw
+def CentroMasa(pixeles):
+    CentroY=[]
+    CentroX=[]
+    for i in pixeles:
+        CentroY.append(i[0])
+        CentroX.append(i[1])
+    CentroY= sum(CentroY)/len(pixeles)
+    CentroX= sum(CentroX)/len(pixeles)
+    return CentroY,CentroX
 
 
 

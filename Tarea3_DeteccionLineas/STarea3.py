@@ -1,68 +1,65 @@
-#The predominant angle is detected
-def Orientacion(ang,visitados):
+def Orientacion(ang,pixeles):
     import math
-    gn=dict()
-    th=[]
-    for i in visitados:
-        theta=int(90+ang[i])
-        th.append(theta)
+    DAngulos=dict()
+    theta=[]
+    for i in pixeles:
+        theta= int(90+ang[i])
+        theta.append(theta)
         if theta==360:
             theta=0
-        if theta not in gn:
-            gn[theta]=1
+        if theta not in DAngulo:
+            DAngulos[theta]=1
         else:
-            gn[theta]+=1
-    v=list(gn.values())
-    k=list(gn.keys())
+            DAngulos[theta]+=1
+    v=list(DAngulos.values())
+    k=list(DAngulos.keys())
     a=v.index(max(v))
     return k[a]
 
-#from the Hough transform, the linear regressor is calculated
-#for each line detected
-def Regresor(h,w,By,Bx,angulo):
+def Regresor(fila,columna,CentroYB,CentroXB,Orientacion):
     import math
     x=1
     y=1
     x2=0
     y2=0
-    r=0
-    r2=0
-    pt=[]
-    while(y<h-1 and y>=1 and x<w-1 and x>=1):
-                x=int(round(Bx-r*math.cos(math.radians(angulo))))
-                y=int(round(By+r*math.sin(math.radians(angulo))))
-                x2=int(round(Bx-r2*math.cos(math.radians(angulo))))
-                y2=int(round(By+r2*math.sin(math.radians(angulo))))
-                if x<w-1 and y<h-1:
-                    pt.append((y,x))
-                    pt.append((y2,x2))
-                r-=1
-                r2+=1
+    radio=0
+    radio2=0
+    puntos=[]
+    while(y<fila-1 and y>=1 and x<columna-1 and x>=1):
+                x=int(round(CentroXB-radio*math.cos(math.radians(Orientacion))))
+                y=int(round(CentroYB+radio*math.sin(math.radians(Orientacion))))
+                x2=int(round(CentroXB-radio2*math.cos(math.radians(Orientacion))))
+                y2=int(round(CentroYB+radio2*math.sin(math.radians(Orientacion))))
+                if x<columna-1 and y<fila-1:
+                    puntos.append((y,x))
+                    puntos.append((y2,x2))
+                radio-=1
+                radio2+=1
             
-    return pt
+    return puntos
 
-#The bounding box and additional parameters are calculated
-def CajaEnvolvente2(visitados):
+
+def CajaEnvolvente2(pixeles):
     import math
-    h=[]
-    w=[]
-    box=[]
-    for i in visitados:
-        h.append(i[0])
-        w.append(i[1])
-    Mh=max(h)
-    mh=min(h)
-    Mw=max(w)
-    mw=min(w)
-    for i in range(mw, Mw):
-        box.append((mh,i))
-    for i in range(mh,Mh+1):
-        box.append((i,Mw))
-    for i in range(mh+1,Mh):
-        box.append((i,mw))
-    for i in range(mw,Mw):
-        box.append((Mh,i))
-    Bmx=mw+int((Mw-mw)/2)
-    Bmy=mh+int((Mh-mh)/2)
-    mag=math.sqrt((Mw-mw)**2 + (Mh-mh)**2)
-    return box,Bmx,Bmy, mag
+    fila=[]
+    columna=[]
+    CajaEnvolvente=[]
+    for i in pixeles:
+        fila.append(i[0])
+        columna.append(i[1])
+    Mfila=max(fila)
+    mfila=min(fila)
+    Mcolumna=max(columna)
+    mcolumna=min(columna)
+    for i in range(mcolumna, Mcolumna):
+        CajaEnvolvente.append((mfila,i))
+    for i in range(mfila,Mfila+1):
+        CajaEnvolvente.append((i,Mcolumna))
+    for i in range(mfila+1,Mfila):
+        CajaEnvolvente.append((i,mcolumna))
+    for i in range(mcolumna,Mcolumna):
+        CajaEnvolvente.append((Mfila,i))
+    CentroXB= mcolumna+int((Mcolumna-mcolumna)/2)
+    CentroYB= mfila+int((Mfila-mfila)/2)
+    magnitud= math.sqrt((Mcolumna-mcolumna)**2 + (Mfila-mfila)**2)
+    return CajaEnvolvente,CentroXB,CentroYB, magnitud
